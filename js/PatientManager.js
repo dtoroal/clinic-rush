@@ -38,9 +38,17 @@ class PatientManager {
         return patient;
     }
     
-    // New: Animate patient walking in, then move to waiting zone
+    // Simplified: Spawn patient directly in waiting area
     spawnPatientAnimated() {
+        console.log(`Trying to spawn patient. Current count: ${this.patients.length}, Max: ${this.gameState.maxPatients}, Game playing: ${this.gameState.isPlaying()}`);
+        
         if (this.patients.length >= this.gameState.maxPatients || !this.gameState.isPlaying()) {
+            if (this.patients.length >= this.gameState.maxPatients) {
+                console.log(`Cannot spawn patient: max patients reached (${this.patients.length}/${this.gameState.maxPatients})`);
+            }
+            if (!this.gameState.isPlaying()) {
+                console.log(`Cannot spawn patient: game not playing (${this.gameState.gameState})`);
+            }
             return null;
         }
         const patientType = this.getRandomPatientType();
@@ -54,12 +62,19 @@ class PatientManager {
             maxPatience: patientType.patience,
             points: patientType.points,
             spawnTime: Date.now(),
-            state: 'walking-in',
+            state: 'waiting',
             walkTimeout: null,
             waitingTimeout: null
         };
         this.patients.push(patient);
-        this.renderWalkingPatient(patient);
+        console.log(`Spawning patient directly in waiting area: ${patient.name} (${patient.typeName})`);
+        this.renderWaitingPatient(patient);
+        
+        // Start patience countdown immediately
+        patient.waitingTimeout = setTimeout(() => {
+            this.makePatientAngryAndLeave(patient);
+        }, patient.patience);
+        
         return patient;
     }
 
@@ -111,12 +126,17 @@ class PatientManager {
         // After walking animation completes, move to waiting area
         patient.walkTimeout = setTimeout(() => {
             this.moveToWaitingArea(patient);
-        }, 2500); // Match the walkIn animation duration
+        }, 3000); // Match the walkIntoHospital animation duration (3s)
     }
 
     moveToWaitingArea(patient) {
+        console.log(`Moving patient ${patient.name} to waiting area`);
         const patientElement = document.querySelector(`[data-patient-id="${patient.id}"]`);
-        if (patientElement) patientElement.remove();
+        if (patientElement) {
+            patientElement.remove();
+        } else {
+            console.warn(`Patient element not found for ${patient.name}`);
+        }
         patient.state = 'waiting';
         this.renderWaitingPatient(patient);
         // Start patience countdown for walking out
@@ -149,35 +169,33 @@ class PatientManager {
 
     makePatientAngryAndLeave(patient) {
         if (patient.state !== 'waiting') return;
+        console.log(`Patient ${patient.name} is leaving angry!`);
+        
+        // Find and animate the patient element before removing
         const patientElement = document.querySelector(`[data-patient-id="${patient.id}"]`);
-        if (patientElement) patientElement.remove();
-        patient.state = 'walking-out';
-        this.renderLeavingPatient(patient);
+        if (patientElement) {
+            // Add angry animation
+            patientElement.classList.add('angry');
+            
+            // Remove after short angry animation
+            setTimeout(() => {
+                if (patientElement.parentNode) {
+                    patientElement.remove();
+                }
+            }, 1000);
+        }
+        
+        patient.state = 'leaving';
+        
+        // Remove patient and notify game manager
         setTimeout(() => {
             this.removePatient(patient.id);
             if (this.gameManager) {
                 this.gameManager.onPatientLeft(patient);
             }
-        }, 2000); // Match walkOut animation
+        }, 1000);
     }
 
-    renderLeavingPatient(patient) {
-        const corridorPath = document.getElementById('corridor-path');
-        const patientElement = document.createElement('div');
-        const variant = this.getPatientVariant(patient);
-        patientElement.className = `patient walking-out angry type-${patient.type} ${variant}`;
-        patientElement.dataset.patientId = patient.id;
-        patientElement.innerHTML = `
-            <div class="patient-person"></div>
-            <div class="patient-details">
-                <div class="patient-name">${patient.name}</div>
-                <div class="patient-type">ANGRY</div>
-                <div class="patient-points">-20 pts</div>
-            </div>
-        `;
-        corridorPath.appendChild(patientElement);
-    }
-    
     selectPatient(patientId) {
         // For drag and drop, we don't need click selection anymore
         // This method is kept for compatibility but can be simplified
@@ -185,8 +203,10 @@ class PatientManager {
     }
     
     removePatient(patientId) {
+        const patientBefore = this.patients.length;
         // Remove from array
         this.patients = this.patients.filter(p => p.id != patientId);
+        console.log(`Removed patient ${patientId}. Count before: ${patientBefore}, after: ${this.patients.length}`);
         
         // Remove from DOM
         const patientElement = document.querySelector(`[data-patient-id="${patientId}"]`);
@@ -268,12 +288,7 @@ class PatientManager {
         this.patients = [];
         this.selectedPatient = null;
         
-        // Clear UI from both the corridor and waiting zone
-        const corridorPath = document.getElementById('corridor-path');
-        if (corridorPath) {
-            corridorPath.innerHTML = '';
-        }
-        
+        // Clear UI from waiting zone
         const waitingZone = document.getElementById('waiting-zone');
         if (waitingZone) {
             waitingZone.innerHTML = '';

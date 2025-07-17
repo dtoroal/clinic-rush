@@ -137,7 +137,7 @@ class GameManager {
             if (this.spawnTimer) {
                 clearInterval(this.spawnTimer);
                 this.spawnTimer = setInterval(() => {
-                    this.patientManager.spawnPatient();
+                    this.spawnPatient();
                 }, newSpawnRate);
             }
         }

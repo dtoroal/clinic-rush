@@ -8,12 +8,12 @@ class GameState {
         this.score = 0;
         this.level = 1;
         this.patientsServed = 0;
-        this.gameTime = 60; // seconds
+        this.gameTime = 30; // seconds
         this.timeLeft = this.gameTime;
         
         // Game configuration
-        this.maxPatients = 6;
-        this.patientSpawnRate = 3000; // milliseconds
+        this.maxPatients = 4;
+        this.patientSpawnRate = 2000; // milliseconds
         this.treatmentTime = {
             'consultation': 2000, // General Consultation - 2 seconds
             'surgery': 4000, // Surgery - 4 seconds
