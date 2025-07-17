@@ -8,7 +8,7 @@ class GameState {
         this.score = 0;
         this.level = 1;
         this.patientsServed = 0;
-        this.gameTime = 30; // seconds
+        this.gameTime = 20; // seconds
         this.timeLeft = this.gameTime;
         
         // Game configuration
@@ -26,7 +26,7 @@ class GameState {
             { name: 'General Consultation', type: 'general', station: 'consultation', patience: 15000, points: 10 },
             { name: 'Surgery', type: 'surgery', station: 'surgery', patience: 20000, points: 25 },
             { name: 'Radiology', type: 'radiology', station: 'radiology', patience: 18000, points: 20 },
-            { name: 'Emergency', type: 'emergency', station: 'emergency', patience: 8000, points: 50 }
+            { name: 'Emergency', type: 'emergency', station: 'emergency', patience: 3000, points: 50 }
         ];
         
         this.patientNames = [
@@ -86,7 +86,7 @@ class GameState {
     
     levelUp() {
         this.level++;
-        this.addTimeBonus(30); // Time bonus for level up
+        this.addTimeBonus(20); // Time bonus for level up
         this.patientSpawnRate = Math.max(1500, this.patientSpawnRate - 200); // Faster spawning
         console.log(`Level ${this.level} reached!`);
         return this.patientSpawnRate;
