@@ -70,47 +70,35 @@ class GameManager {
         this.uiManager.updateButtons('stopped');
     }
     
+    // Override spawnPatient to use animated version
+    spawnPatient() {
+        this.patientManager.spawnPatientAnimated();
+    }
+
+    // Update startTimers to use the new spawnPatient
     startTimers() {
         // Main game timer
         this.gameTimer = setInterval(() => {
-            this.gameState.decreaseTime();
+            this.gameState.timeLeft--;
             this.uiManager.updateGameStats();
-            
-            if (this.gameState.isGameOver()) {
+            if (this.gameState.timeLeft <= 0) {
                 this.endGame();
             }
         }, 1000);
-        
         // Timer to generate patients
         this.spawnTimer = setInterval(() => {
-            this.patientManager.spawnPatient();
+            this.spawnPatient();
         }, this.gameState.patientSpawnRate);
-        
-        // Timer to update patient patience
-        this.patienceTimer = setInterval(() => {
-            this.patientManager.updatePatience();
-        }, 100);
-        
         // Generate first patient immediately
-        this.patientManager.spawnPatient();
+        this.spawnPatient();
     }
-    
-    stopTimers() {
-        if (this.gameTimer) {
-            clearInterval(this.gameTimer);
-            this.gameTimer = null;
-        }
-        if (this.spawnTimer) {
-            clearInterval(this.spawnTimer);
-            this.spawnTimer = null;
-        }
-        if (this.patienceTimer) {
-            clearInterval(this.patienceTimer);
-            this.patienceTimer = null;
-        }
-        
-        // Stop all treatment timers
-        this.treatmentManager.stopAllTreatments();
+
+    // Handle patient leaving angry
+    onPatientLeft(patient) {
+        this.gameState.addScore(-20);
+        // TODO: Implement life system if needed
+        this.uiManager.updateGameStats();
+        this.uiManager.showScorePopup(-20, 'waiting-zone');
     }
     
     treatPatient(stationId) {
