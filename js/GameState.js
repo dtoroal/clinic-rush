@@ -10,7 +10,7 @@ class GameState {
         this.patientsServed = 0;
         this.gameTime = 20; // seconds
         this.timeLeft = this.gameTime;
-        
+
         // Game configuration
         this.maxPatients = 4;
         this.patientSpawnRate = 2000; // milliseconds
@@ -20,7 +20,7 @@ class GameState {
             'radiology': 3000, // Radiology - 3 seconds
             'emergency': 1500  // Emergency - 1.5 seconds
         };
-        
+
         // Patient types configuration
         this.patientTypes = [
             { name: 'General Consultation', type: 'general', station: 'consultation', patience: 15000, points: 10 },
@@ -28,14 +28,14 @@ class GameState {
             { name: 'Radiology', type: 'radiology', station: 'radiology', patience: 18000, points: 20 },
             { name: 'Emergency', type: 'emergency', station: 'emergency', patience: 3000, points: 50 }
         ];
-        
+
         this.patientNames = [
-            'Anna Garcia', 'Louis Martin', 'Mary Lopez', 'Charles Ruiz', 'Elena Diaz',
-            'Peter Sanchez', 'Laura Gonzalez', 'Michael Torres', 'Carmen Vega', 'Joseph Morales',
-            'Isabel Ramos', 'Anthony Herrera', 'Rose Jimenez', 'Francis Castro', 'Pilar Ortega'
+            'Emily Smith', 'James Johnson', 'Olivia Brown', 'Michael Davis', 'Sophia Wilson',
+            'Daniel Miller', 'Emma Taylor', 'William Anderson', 'Ava Thomas', 'John Moore',
+            'Lily Jackson', 'David White', 'Chloe Harris', 'Benjamin Martin', 'Grace Lewis'
         ];
     }
-    
+
     reset() {
         this.gameState = 'playing';
         this.score = 0;
@@ -43,47 +43,47 @@ class GameState {
         this.patientsServed = 0;
         this.timeLeft = this.gameTime;
     }
-    
+
     isPlaying() {
         return this.gameState === 'playing';
     }
-    
+
     isPaused() {
         return this.gameState === 'paused';
     }
-    
+
     pause() {
         this.gameState = 'paused';
     }
-    
+
     resume() {
         this.gameState = 'playing';
     }
-    
+
     stop() {
         this.gameState = 'stopped';
     }
-    
+
     addScore(points) {
         this.score += points;
     }
-    
+
     subtractScore(points) {
         this.score = Math.max(0, this.score - points);
     }
-    
+
     incrementPatientsServed() {
         this.patientsServed++;
     }
-    
+
     decreaseTime() {
         this.timeLeft--;
     }
-    
+
     addTimeBonus(seconds) {
         this.timeLeft += seconds;
     }
-    
+
     levelUp() {
         this.level++;
         this.addTimeBonus(20); // Time bonus for level up
@@ -91,12 +91,12 @@ class GameState {
         console.log(`Level ${this.level} reached!`);
         return this.patientSpawnRate;
     }
-    
+
     shouldLevelUp() {
         const requiredPatients = this.level * 5;
         return this.patientsServed >= requiredPatients;
     }
-    
+
     isGameOver() {
         return this.timeLeft <= 0;
     }
