@@ -15,16 +15,18 @@ class GameState {
         this.maxPatients = 6;
         this.patientSpawnRate = 3000; // milliseconds
         this.treatmentTime = {
-            1: 2000, // General Consultation - 2 seconds
-            2: 4000, // Specialized Medicine - 4 seconds
-            3: 1500  // Emergency - 1.5 seconds
+            'consultation': 2000, // General Consultation - 2 seconds
+            'surgery': 4000, // Surgery - 4 seconds
+            'radiology': 3000, // Radiology - 3 seconds
+            'emergency': 1500  // Emergency - 1.5 seconds
         };
         
         // Patient types configuration
         this.patientTypes = [
-            { name: 'General Consultation', type: 'general', station: 1, patience: 15000, points: 10 },
-            { name: 'Specialist', type: 'specialist', station: 2, patience: 20000, points: 25 },
-            { name: 'Emergency', type: 'emergency', station: 3, patience: 8000, points: 50 }
+            { name: 'General Consultation', type: 'general', station: 'consultation', patience: 15000, points: 10 },
+            { name: 'Surgery', type: 'surgery', station: 'surgery', patience: 20000, points: 25 },
+            { name: 'Radiology', type: 'radiology', station: 'radiology', patience: 18000, points: 20 },
+            { name: 'Emergency', type: 'emergency', station: 'emergency', patience: 8000, points: 50 }
         ];
         
         this.patientNames = [

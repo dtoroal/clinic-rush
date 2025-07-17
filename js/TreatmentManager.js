@@ -7,9 +7,10 @@ class TreatmentManager {
         this.patientManager = patientManager;
         this.gameManager = gameManager;
         this.treatmentStations = {
-            1: { occupied: false, patientId: null, timer: null },
-            2: { occupied: false, patientId: null, timer: null },
-            3: { occupied: false, patientId: null, timer: null }
+            'consultation': { occupied: false, patientId: null, timer: null },
+            'surgery': { occupied: false, patientId: null, timer: null },
+            'radiology': { occupied: false, patientId: null, timer: null },
+            'emergency': { occupied: false, patientId: null, timer: null }
         };
     }
     
@@ -17,28 +18,8 @@ class TreatmentManager {
         this.gameManager = gameManager;
     }
     
-    treatPatient(stationId) {
-        const patient = this.patientManager.getSelectedPatient();
-        if (!patient || !this.gameState.isPlaying()) {
-            alert('Select a patient first');
-            return false;
-        }
-        
-        const station = this.treatmentStations[stationId];
-        if (station.occupied) {
-            alert('This station is occupied');
-            return false;
-        }
-        
-        if (patient.station !== stationId) {
-            alert(`This patient needs to go to station ${patient.station}`);
-            return false;
-        }
-        
-        this.movePatientToStation(patient, stationId);
-        return true;
-    }
-    
+    // This method is now called directly by DragDropManager
+    // instead of the old treatPatient method
     movePatientToStation(patient, stationId) {
         const station = this.treatmentStations[stationId];
         
@@ -58,6 +39,7 @@ class TreatmentManager {
         }, this.gameState.treatmentTime[stationId]);
         
         console.log(`${patient.name} is being treated at station ${stationId}`);
+        return true;
     }
     
     completePatientTreatment(patient, stationId) {
@@ -127,8 +109,13 @@ class TreatmentManager {
     
     updateStationUI(patient, stationId, status) {
         const stationElement = document.getElementById(`station-${stationId}`);
+        if (!stationElement) {
+            console.error(`Station element not found: station-${stationId}`);
+            return;
+        }
+        
         const stationPatient = stationElement.querySelector('.station-patient');
-        const treatButton = stationElement.querySelector('.treat-button');
+        const dropHint = stationElement.querySelector('.drop-hint');
         
         if (status === 'treating' && patient) {
             stationPatient.innerHTML = `
@@ -141,13 +128,11 @@ class TreatmentManager {
                 </div>
             `;
             stationPatient.classList.add('occupied');
-            treatButton.disabled = true;
-            treatButton.textContent = 'Treating...';
+            if (dropHint) dropHint.style.display = 'none';
         } else {
             stationPatient.innerHTML = '<span class="station-status">Available</span>';
             stationPatient.classList.remove('occupied');
-            treatButton.disabled = false;
-            treatButton.textContent = 'Treat';
+            if (dropHint) dropHint.style.display = 'block';
         }
     }
     

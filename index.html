@@ -40,27 +40,35 @@
 
             <div class="treatment-area">
                 <h3>🩺 Treatment Area</h3>
+                <p class="drag-instruction">Drag patients from the waiting room to the correct treatment stations!</p>
                 <div class="treatment-stations">
-                    <div class="treatment-station" id="station-1" data-station="1">
-                        <h4>General Consultation</h4>
+                    <div class="treatment-station drop-zone" id="station-consultation" data-station="consultation">
+                        <h4>🩺 Consultation</h4>
                         <div class="station-patient" data-patient-id="">
                             <span class="station-status">Available</span>
                         </div>
-                        <button class="treat-button" onclick="game.treatPatient(1)">Treat</button>
+                        <div class="drop-hint">Drop consultation patients here</div>
                     </div>
-                    <div class="treatment-station" id="station-2" data-station="2">
-                        <h4>Specialized Medicine</h4>
+                    <div class="treatment-station drop-zone" id="station-surgery" data-station="surgery">
+                        <h4>🔪 Surgery</h4>
                         <div class="station-patient" data-patient-id="">
                             <span class="station-status">Available</span>
                         </div>
-                        <button class="treat-button" onclick="game.treatPatient(2)">Treat</button>
+                        <div class="drop-hint">Drop surgery patients here</div>
                     </div>
-                    <div class="treatment-station" id="station-3" data-station="3">
-                        <h4>Emergency</h4>
+                    <div class="treatment-station drop-zone" id="station-radiology" data-station="radiology">
+                        <h4>📷 Radiology</h4>
                         <div class="station-patient" data-patient-id="">
                             <span class="station-status">Available</span>
                         </div>
-                        <button class="treat-button" onclick="game.treatPatient(3)">Treat</button>
+                        <div class="drop-hint">Drop radiology patients here</div>
+                    </div>
+                    <div class="treatment-station drop-zone" id="station-emergency" data-station="emergency">
+                        <h4>🚨 Emergency</h4>
+                        <div class="station-patient" data-patient-id="">
+                            <span class="station-status">Available</span>
+                        </div>
+                        <div class="drop-hint">Drop emergency patients here</div>
                     </div>
                 </div>
             </div>
@@ -88,6 +96,7 @@
     <script src="js/PatientManager.js"></script>
     <script src="js/TreatmentManager.js"></script>
     <script src="js/UIManager.js"></script>
+    <script src="js/DragDropManager.js"></script>
     <script src="js/GameManager.js"></script>
 </body>
 </html>

@@ -7,6 +7,7 @@ class GameManager {
         this.patientManager = new PatientManager(this.gameState, this);
         this.treatmentManager = new TreatmentManager(this.gameState, this.patientManager, this);
         this.uiManager = new UIManager(this.gameState);
+        this.dragDropManager = new DragDropManager(this.gameState, this.patientManager, this.treatmentManager, this.uiManager);
         
         // Set cross-references
         this.patientManager.setGameManager(this);
@@ -22,12 +23,9 @@ class GameManager {
     }
     
     initializeEventListeners() {
-        // Event listeners for selecting patients
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('patient')) {
-                this.patientManager.selectPatient(e.target.dataset.patientId);
-            }
-        });
+        // The drag and drop manager now handles all patient movement interactions
+        // No need for click-to-select logic anymore
+        console.log('Game event listeners initialized - using drag and drop controls');
     }
     
     startGame() {

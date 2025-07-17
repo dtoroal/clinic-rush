@@ -63,6 +63,10 @@ class PatientManager {
         const patientElement = document.createElement('div');
         patientElement.className = `patient patient-enter type-${patient.type}`;
         patientElement.dataset.patientId = patient.id;
+        patientElement.dataset.station = patient.station;
+        
+        // Make patient draggable
+        patientElement.draggable = true;
         
         patientElement.innerHTML = `
             <div class="patient-avatar">
@@ -77,24 +81,16 @@ class PatientManager {
                 </div>
             </div>
             <div class="patient-speech-bubble"></div>
+            <div class="drag-hint">📋 Drag to station ${patient.station}</div>
         `;
         
         container.appendChild(patientElement);
     }
     
     selectPatient(patientId) {
-        // Deselect previous patient
-        document.querySelectorAll('.patient').forEach(p => {
-            p.classList.remove('selected');
-        });
-        
-        // Select new patient
-        const patientElement = document.querySelector(`[data-patient-id="${patientId}"]`);
-        if (patientElement) {
-            patientElement.classList.add('selected');
-            this.selectedPatient = this.patients.find(p => p.id == patientId);
-            console.log(`Patient selected: ${this.selectedPatient.name}`);
-        }
+        // For drag and drop, we don't need click selection anymore
+        // This method is kept for compatibility but can be simplified
+        console.log(`Patient ${patientId} interacted with`);
     }
     
     removePatient(patientId) {
