@@ -79,8 +79,8 @@ class PatientManager {
     }
 
     getRandomPatientType() {
-        // Adjust probabilities based on level
-        const weights = [0.5, 0.3, 0.2]; // General, Specialist, Emergency
+        // Adjust probabilities based on level - includes all 4 patient types
+        const weights = [0.4, 0.25, 0.25, 0.1]; // General, Surgery, Radiology, Emergency
         const random = Math.random();
         let weightSum = 0;
         
