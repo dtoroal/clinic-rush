@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinic Rush - Hospital Management Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <h1>🏥 Clinic Rush</h1>
+            <div class="game-stats">
+                <div class="stat">
+                    <span class="stat-label">Score:</span>
+                    <span id="score" class="stat-value">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Patients Served:</span>
+                    <span id="patients-served" class="stat-value">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Level:</span>
+                    <span id="level" class="stat-value">1</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Time:</span>
+                    <span id="timer" class="stat-value">60</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="game-area">
+            <div class="waiting-room">
+                <h3>🪑 Waiting Room</h3>
+                <div id="waiting-patients" class="patients-container">
+                    <!-- Patients will appear here -->
+                </div>
+            </div>
+
+            <div class="treatment-area">
+                <h3>🩺 Treatment Area</h3>
+                <div class="treatment-stations">
+                    <div class="treatment-station" id="station-1" data-station="1">
+                        <h4>General Consultation</h4>
+                        <div class="station-patient" data-patient-id="">
+                            <span class="station-status">Available</span>
+                        </div>
+                        <button class="treat-button" onclick="game.treatPatient(1)">Treat</button>
+                    </div>
+                    <div class="treatment-station" id="station-2" data-station="2">
+                        <h4>Specialized Medicine</h4>
+                        <div class="station-patient" data-patient-id="">
+                            <span class="station-status">Available</span>
+                        </div>
+                        <button class="treat-button" onclick="game.treatPatient(2)">Treat</button>
+                    </div>
+                    <div class="treatment-station" id="station-3" data-station="3">
+                        <h4>Emergency</h4>
+                        <div class="station-patient" data-patient-id="">
+                            <span class="station-status">Available</span>
+                        </div>
+                        <button class="treat-button" onclick="game.treatPatient(3)">Treat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-controls">
+            <button id="start-btn" onclick="game.startGame()">Start Game</button>
+            <button id="pause-btn" onclick="game.pauseGame()">Pause</button>
+            <button id="restart-btn" onclick="game.restartGame()">Restart</button>
+        </div>
+
+        <div id="game-over-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Game Over!</h2>
+                <p>Final Score: <span id="final-score">0</span></p>
+                <p>Patients Served: <span id="final-patients">0</span></p>
+                <p>Level Reached: <span id="final-level">1</span></p>
+                <button onclick="game.restartGame()">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Modules -->
+    <script src="js/GameState.js"></script>
+    <script src="js/PatientManager.js"></script>
+    <script src="js/TreatmentManager.js"></script>
+    <script src="js/UIManager.js"></script>
+    <script src="js/GameManager.js"></script>
+</body>
+</html>

@@ -1,0 +1,682 @@
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+}
+
+.game-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header del juego */
+.game-header {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.game-header h1 {
+    text-align: center;
+    color: #4a5568;
+    margin-bottom: 15px;
+    font-size: 2.5em;
+}
+
+.game-stats {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.stat {
+    text-align: center;
+    padding: 10px;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #2d3748;
+}
+
+/* Área de juego */
+.game-area {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.waiting-room, .treatment-area {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.waiting-room h3, .treatment-area h3 {
+    margin-bottom: 15px;
+    color: #4a5568;
+    text-align: center;
+}
+
+/* Pacientes con estilo cartoon */
+.patient {
+    background: white;
+    color: #333;
+    padding: 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 3px solid #e2e8f0;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.patient:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: #4299e1;
+}
+
+.patient.selected {
+    border-color: #ffd700;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+    background: linear-gradient(45deg, #fff9e6, #ffffff);
+}
+
+.patient.angry {
+    border-color: #f56565;
+    background: linear-gradient(45deg, #fff5f5, #ffffff);
+    animation: shake 0.5s infinite;
+}
+
+.patient.very-angry {
+    border-color: #e53e3e;
+    background: linear-gradient(45deg, #fed7d7, #ffffff);
+    animation: shake 0.3s infinite;
+}
+
+/* Cara del paciente cartoon */
+.patient-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5em;
+    background: linear-gradient(45deg, #ffeaa7, #fdcb6e);
+    border: 3px solid #fdcb6e;
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* Expresiones faciales */
+.patient-face {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.face-happy::before {
+    content: '😊';
+    font-size: 1em;
+}
+
+.face-neutral::before {
+    content: '😐';
+    font-size: 1em;
+}
+
+.face-worried::before {
+    content: '😟';
+    font-size: 1em;
+}
+
+.face-angry::before {
+    content: '😠';
+    font-size: 1em;
+}
+
+.face-very-angry::before {
+    content: '😡';
+    font-size: 1em;
+}
+
+/* Tipos de pacientes con colores diferentes */
+.patient.type-general .patient-avatar {
+    background: linear-gradient(45deg, #74b9ff, #0984e3);
+    border-color: #0984e3;
+}
+
+.patient.type-specialist .patient-avatar {
+    background: linear-gradient(45deg, #fd79a8, #e84393);
+    border-color: #e84393;
+}
+
+.patient.type-emergency .patient-avatar {
+    background: linear-gradient(45deg, #ff7675, #d63031);
+    border-color: #d63031;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Información del paciente mejorada */
+.patient-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.patient-name {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #2d3748;
+}
+
+.patient-type {
+    font-size: 0.9em;
+    color: #4a5568;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.patient-type::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.patient.type-general .patient-type::before {
+    background: #0984e3;
+}
+
+.patient.type-specialist .patient-type::before {
+    background: #e84393;
+}
+
+.patient.type-emergency .patient-type::before {
+    background: #d63031;
+}
+
+.patient-points {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #38a169;
+    background: #f0fff4;
+    padding: 2px 8px;
+    border-radius: 10px;
+    align-self: flex-start;
+}
+
+/* Barra de paciencia mejorada */
+.patience-bar {
+    width: 100%;
+    height: 10px;
+    background: #e2e8f0;
+    border-radius: 5px;
+    margin-top: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.patience-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #48bb78, #38a169);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.patience-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.patience-fill.low {
+    background: linear-gradient(90deg, #ed8936, #dd6b20);
+}
+
+.patience-fill.critical {
+    background: linear-gradient(90deg, #f56565, #e53e3e);
+    animation: blink 0.5s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.5; }
+}
+
+/* Área de tratamiento */
+.treatment-stations {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.treatment-station {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.treatment-station:hover {
+    border-color: #007bff;
+}
+
+.treatment-station h4 {
+    color: #495057;
+    margin-bottom: 10px;
+    font-size: 1em;
+}
+
+.station-patient {
+    min-height: 80px;
+    background: #f7fafc;
+    border: 2px dashed #e2e8f0;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    position: relative;
+    padding: 10px;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.station-patient.occupied {
+    background: linear-gradient(45deg, #e6fffa, #b2f5ea);
+    border: 2px solid #4fd1c7;
+    color: #234e52;
+}
+
+.station-patient.occupied .patient-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5em;
+}
+
+.station-patient.occupied .patient-details {
+    text-align: left;
+}
+
+.station-patient.occupied .patient-name {
+    font-size: 0.9em;
+    margin-bottom: 2px;
+}
+
+.station-patient.occupied .patient-type {
+    font-size: 0.8em;
+}
+
+.station-status {
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+.treat-button {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.treat-button:hover {
+    background: #218838;
+    transform: translateY(-2px);
+}
+
+.treat-button:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Controles del juego */
+.game-controls {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.game-controls button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    margin: 0 10px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.game-controls button:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+}
+
+.game-controls button:active {
+    transform: translateY(0);
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 400px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h2 {
+    color: #4a5568;
+    margin-bottom: 20px;
+}
+
+.modal-content p {
+    margin: 10px 0;
+    color: #666;
+    font-size: 1.1em;
+}
+
+.modal-content button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.modal-content button:hover {
+    background: #0056b3;
+}
+
+/* Efectos de puntuación */
+.score-popup {
+    position: absolute;
+    color: #28a745;
+    font-weight: bold;
+    font-size: 1.5em;
+    pointer-events: none;
+    animation: scorePopup 1s ease-out forwards;
+    z-index: 100;
+}
+
+@keyframes scorePopup {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-50px) scale(1.2);
+    }
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .game-area {
+        grid-template-columns: 1fr;
+    }
+    
+    .game-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .game-header h1 {
+        font-size: 2em;
+    }
+    
+    .treatment-stations {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Efectos de sonido y expresiones adicionales */
+.patient-speech-bubble {
+    position: absolute;
+    top: -30px;
+    right: 10px;
+    background: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border: 1px solid #e2e8f0;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.patient-speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 20px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid white;
+}
+
+.patient:hover .patient-speech-bubble {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Mensajes según el estado del paciente */
+.patient.type-general .patient-speech-bubble::before {
+    content: "I need a check-up! 🩺";
+}
+
+.patient.type-specialist .patient-speech-bubble::before {
+    content: "I need a specialist! 👨‍⚕️";
+}
+
+.patient.type-emergency .patient-speech-bubble::before {
+    content: "Emergency! Help! 🚨";
+}
+
+.patient.angry .patient-speech-bubble::before {
+    content: "I'm getting impatient... 😤";
+}
+
+.patient.very-angry .patient-speech-bubble::before {
+    content: "This is taking too long! 😡";
+}
+
+/* Animaciones adicionales para expresividad */
+.patient.type-emergency {
+    animation: emergencyPulse 1.5s infinite;
+}
+
+@keyframes emergencyPulse {
+    0%, 100% { 
+        transform: scale(1); 
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    }
+    50% { 
+        transform: scale(1.02); 
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+    }
+}
+
+/* Efectos cuando el paciente es seleccionado */
+.patient.selected .patient-avatar {
+    animation: bounce 0.6s ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 20%, 60%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    80% { transform: translateY(-5px); }
+}
+
+/* Partículas de felicidad cuando un paciente es curado */
+@keyframes happyParticles {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-50px) scale(0);
+    }
+}
+
+.happy-particle {
+    position: absolute;
+    font-size: 1.2em;
+    pointer-events: none;
+    animation: happyParticles 1s ease-out forwards;
+    z-index: 100;
+}
+
+/* Mejoras adicionales para la sala de espera */
+.patients-container {
+    min-height: 300px;
+    border: 3px dashed #cbd5e0;
+    border-radius: 15px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    position: relative;
+}
+
+.patients-container::before {
+    content: "👆 Click to select a patient";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #a0aec0;
+    font-size: 1.1em;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.patients-container:empty::before {
+    opacity: 1;
+}
+
+/* Animaciones de entrada y salida */
+.patient-enter {
+    animation: slideInLeft 0.5s ease-out;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.patient-leave {
+    animation: slideOutRight 0.5s ease-out;
+}
+
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
