@@ -84,44 +84,20 @@ class PatientManager {
     }
     
     renderPatient(patient) {
-        const container = document.getElementById('waiting-patients');
-        const patientElement = document.createElement('div');
-        patientElement.className = `patient patient-enter type-${patient.type}`;
-        patientElement.dataset.patientId = patient.id;
-        patientElement.dataset.station = patient.station;
-        
-        // Make patient draggable
-        patientElement.draggable = true;
-        
-        patientElement.innerHTML = `
-            <div class="patient-avatar">
-                <div class="patient-face face-happy"></div>
-            </div>
-            <div class="patient-details">
-                <div class="patient-name">${patient.name}</div>
-                <div class="patient-type">${patient.typeName}</div>
-                <div class="patient-points">+${patient.points} pts</div>
-                <div class="patience-bar">
-                    <div class="patience-fill" style="width: 100%"></div>
-                </div>
-            </div>
-            <div class="patient-speech-bubble"></div>
-            <div class="drag-hint">📋 Drag to station ${patient.station}</div>
-        `;
-        
-        container.appendChild(patientElement);
+        // This method is now only used for backwards compatibility
+        // The new animated flow uses renderWalkingPatient -> renderWaitingPatient
+        console.log('Note: renderPatient called - consider using animated flow instead');
     }
     
     renderWalkingPatient(patient) {
         const corridorPath = document.getElementById('corridor-path');
         const patientElement = document.createElement('div');
-        patientElement.className = `patient walking-in type-${patient.type}`;
+        const variant = this.getPatientVariant(patient);
+        patientElement.className = `patient walking-in type-${patient.type} ${variant}`;
         patientElement.dataset.patientId = patient.id;
         patientElement.dataset.station = patient.station;
         patientElement.innerHTML = `
-            <div class="patient-avatar">
-                <div class="patient-face face-happy"></div>
-            </div>
+            <div class="patient-person"></div>
             <div class="patient-details">
                 <div class="patient-name">${patient.name}</div>
                 <div class="patient-type">${patient.typeName}</div>
@@ -152,14 +128,13 @@ class PatientManager {
     renderWaitingPatient(patient) {
         const waitingZone = document.getElementById('waiting-zone');
         const patientElement = document.createElement('div');
-        patientElement.className = `patient waiting type-${patient.type}`;
+        const variant = this.getPatientVariant(patient);
+        patientElement.className = `patient waiting type-${patient.type} ${variant}`;
         patientElement.dataset.patientId = patient.id;
         patientElement.dataset.station = patient.station;
         patientElement.draggable = true;
         patientElement.innerHTML = `
-            <div class="patient-avatar">
-                <div class="patient-face face-happy"></div>
-            </div>
+            <div class="patient-person"></div>
             <div class="patient-details">
                 <div class="patient-name">${patient.name}</div>
                 <div class="patient-type">${patient.typeName}</div>
@@ -189,12 +164,11 @@ class PatientManager {
     renderLeavingPatient(patient) {
         const corridorPath = document.getElementById('corridor-path');
         const patientElement = document.createElement('div');
-        patientElement.className = `patient walking-out angry type-${patient.type}`;
+        const variant = this.getPatientVariant(patient);
+        patientElement.className = `patient walking-out angry type-${patient.type} ${variant}`;
         patientElement.dataset.patientId = patient.id;
         patientElement.innerHTML = `
-            <div class="patient-avatar">
-                <div class="patient-face face-very-angry"></div>
-            </div>
+            <div class="patient-person"></div>
             <div class="patient-details">
                 <div class="patient-name">${patient.name}</div>
                 <div class="patient-type">ANGRY</div>
@@ -294,7 +268,18 @@ class PatientManager {
         this.patients = [];
         this.selectedPatient = null;
         
-        // Clear UI
+        // Clear UI from both the corridor and waiting zone
+        const corridorPath = document.getElementById('corridor-path');
+        if (corridorPath) {
+            corridorPath.innerHTML = '';
+        }
+        
+        const waitingZone = document.getElementById('waiting-zone');
+        if (waitingZone) {
+            waitingZone.innerHTML = '';
+        }
+        
+        // Also clear the old waiting-patients container if it exists (for backwards compatibility)
         const container = document.getElementById('waiting-patients');
         if (container) {
             container.innerHTML = '';
@@ -311,5 +296,12 @@ class PatientManager {
     
     getPatientCount() {
         return this.patients.length;
+    }
+
+    getPatientVariant(patient) {
+        // Add variety to patient appearances based on name hash
+        const hash = patient.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const variants = ['variant-1', 'variant-2', 'variant-3', 'variant-4', 'variant-5'];
+        return variants[hash % variants.length];
     }
 }

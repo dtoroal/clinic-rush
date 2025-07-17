@@ -93,6 +93,21 @@ class GameManager {
         this.spawnPatient();
     }
 
+    stopTimers() {
+        if (this.gameTimer) {
+            clearInterval(this.gameTimer);
+            this.gameTimer = null;
+        }
+        if (this.spawnTimer) {
+            clearInterval(this.spawnTimer);
+            this.spawnTimer = null;
+        }
+        if (this.patienceTimer) {
+            clearInterval(this.patienceTimer);
+            this.patienceTimer = null;
+        }
+    }
+
     // Handle patient leaving angry
     onPatientLeft(patient) {
         this.gameState.addScore(-20);

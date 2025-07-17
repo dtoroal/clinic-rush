@@ -81,6 +81,19 @@ class UIManager {
     }
     
     clearWaitingRoom() {
+        // Clear the new waiting zone
+        const waitingZone = document.getElementById('waiting-zone');
+        if (waitingZone) {
+            waitingZone.innerHTML = '';
+        }
+        
+        // Clear the corridor path
+        const corridorPath = document.getElementById('corridor-path');
+        if (corridorPath) {
+            corridorPath.innerHTML = '';
+        }
+        
+        // Also clear the old waiting-patients container if it exists (for backwards compatibility)
         const container = document.getElementById('waiting-patients');
         if (container) {
             container.innerHTML = '';
