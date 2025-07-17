@@ -8,7 +8,7 @@ class GameState {
         this.score = 0;
         this.level = 1;
         this.patientsServed = 0;
-        this.gameTime = 20; // seconds
+        this.gameTime = 25; // seconds
         this.timeLeft = this.gameTime;
 
         // Game configuration
@@ -32,7 +32,7 @@ class GameState {
         this.patientNames = [
             'Emily Smith', 'James Johnson', 'Olivia Brown', 'Michael Davis', 'Sophia Wilson',
             'Daniel Miller', 'Emma Taylor', 'William Anderson', 'Ava Thomas', 'John Moore',
-            'Lily Jackson', 'David White', 'Chloe Harris', 'Benjamin Martin', 'Grace Lewis'
+            'Lily Jackson', 'David White', 'Chloe Harris', 'Jhon Martin', 'Grace Lewis'
         ];
     }
 
